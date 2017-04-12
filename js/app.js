@@ -7,36 +7,32 @@ console.log(reqButton);
 
 
 reqButton.addEventListener('click', function(event){
-	// console.log(resourceType.value);
-	// console.log(resourceId.value);
-	// console.log('http://swapi.co/api/' + resourceType.value + '/'+ resourceId.value + '/');
 
+	four.innerHTML = null;
 	const oneReq = new XMLHttpRequest();
 
 	if(resourceType.value === "people"){
 		oneReq.addEventListener('load', reqPerson);
 		oneReq.open('GET', 'http://swapi.co/api/' + resourceType.value + '/'+ resourceId.value + '/');
 		oneReq.send();
-		function reqPerson() {
-			const requestData = JSON.parse(this.responseText);
-			const name = requestData.name;
-			one.innerHTML = 'Name: ' + name;		
-			const gender = requestData.gender;
-			two.innerHTML = `Gender: ${gender}`;
-			const twoReq = new XMLHttpRequest();
-			twoReq.open('GET', gender);
-			twoReq.addEventListener('load', reqPerson);
-    		const speciesReq = new XMLHttpRequest();
-    		speciesReq.addEventListener('load', speciesRequire);
-    		speciesReq.open('GET', requestData.species);
-    		speciesReq.send();
-    		function speciesRequire() {
-      		const requestSpecies = JSON.parse(this.responseText);
-      		three.innerHTML = requestSpecies.name;
-    	}
-	}
-	
-		
+			function reqPerson() {
+				const requestData = JSON.parse(this.responseText);
+				const name = requestData.name;
+				one.innerHTML = 'Name: ' + name;		
+				const gender = requestData.gender;
+				two.innerHTML = `Gender: ${gender}`;
+				const twoReq = new XMLHttpRequest();
+				twoReq.open('GET', gender);
+				twoReq.addEventListener('load', reqPerson);
+    			const speciesReq = new XMLHttpRequest();
+    			speciesReq.addEventListener('load', speciesRequire);
+    			speciesReq.open('GET', requestData.species);
+    			speciesReq.send();
+    			function speciesRequire() {
+      			const requestSpecies = JSON.parse(this.responseText);
+      			three.innerHTML = requestSpecies.name;
+    		}
+		}	
 	}
 	if(resourceType.value === "planets"){
 		oneReq.addEventListener('load', reqPlanet);
@@ -64,12 +60,27 @@ reqButton.addEventListener('click', function(event){
 			}
 				function filmRequire(){
 					const filmData = JSON.parse(this.responseText);
-    				let newList = document.createElement('li');
+    				let newList = document.createElement('div');
     				const planetName = filmData.title;
     				newList.innerHTML = planetName;
     				four.appendChild(newList);
     				console.log(filmData.title);
 				}
+		}
+	}
+	if(resourceType.value === "starships"){
+		oneReq.addEventListener('load', reqStarships);
+		oneReq.open('GET', 'http://swapi.co/api/' + resourceType.value + '/'+ resourceId.value + '/');
+		oneReq.send();
+
+		function reqStarships() {
+			const requestShips = JSON.parse(this.responseText);
+			const shipName = requestShips.name;
+			one.innerHTML = `name: ${shipName}`;
+			const shipManufac = requestShips.manufacturer;
+			two.innerHTML = `manufacturer: ${shipManufac}`;
+			const shipClass = requestShips.starship_class;
+			three.innerHTML = `ship class: ${shipClass}`;
 		}
 	}
 }
